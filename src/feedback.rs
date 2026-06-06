@@ -1,4 +1,8 @@
+use std::time::Duration;
+
 use leptos::prelude::*;
+
+use super::presence::use_presence;
 
 #[component]
 pub fn ErrorBanner(
@@ -92,18 +96,50 @@ pub fn EmptyState(
 #[component]
 pub fn Tooltip(
     #[prop(into)] content: String,
+    /// Hover open delay in ms (keyboard focus opens immediately).
+    #[prop(optional, default = 300)]
+    delay_ms: u64,
     #[prop(optional, into)] class: String,
     children: Children,
 ) -> impl IntoView {
+    let open = RwSignal::new(false);
+    let hovering = RwSignal::new(false);
+    let p = use_presence(open.into(), 150);
+    let content = StoredValue::new(content);
     view! {
-        <div class=format!(
-            "relative group inline-flex {}",
-            class,
-        )>
+        <div
+            class=format!("relative inline-flex {}", class)
+            on:mouseenter=move |_| {
+                hovering.set(true);
+                set_timeout(
+                    move || {
+                        if hovering.get_untracked() {
+                            open.set(true);
+                        }
+                    },
+                    Duration::from_millis(delay_ms),
+                );
+            }
+            on:mouseleave=move |_| {
+                hovering.set(false);
+                open.set(false);
+            }
+            on:focusin=move |_| open.set(true)
+            on:focusout=move |_| open.set(false)
+        >
             {children()}
-            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-popover border border-border rounded-md shadow-md text-xs text-popover-foreground whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                {content}
-            </div>
+            <Show when=move || p.mounted.get()>
+                <div class=move || {
+                    format!(
+                        "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-popover border border-border rounded-md shadow-md text-xs text-popover-foreground whitespace-nowrap pointer-events-none z-50 duration-150 {}",
+                        if p.open.get() {
+                            "animate-in fade-in-0 zoom-in-95"
+                        } else {
+                            "animate-out fade-out-0 zoom-out-95"
+                        },
+                    )
+                }>{content.get_value()}</div>
+            </Show>
         </div>
     }
 }

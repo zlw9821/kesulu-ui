@@ -30,6 +30,7 @@ mod slider;
 mod spinner;
 mod table;
 mod tabs;
+mod toast;
 mod toggle;
 
 pub use accordion::*;
@@ -64,4 +65,5 @@ pub use slider::*;
 pub use spinner::*;
 pub use table::*;
 pub use tabs::*;
+pub use toast::*;
 pub use toggle::*;
