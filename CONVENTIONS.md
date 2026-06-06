@@ -107,6 +107,7 @@ kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
 | `item` | `Item`, `ItemGroup`, `ItemMedia`, `ItemContent`, `ItemTitle`, `ItemDescription`, `ItemActions`, `ItemHeader`, `ItemFooter`, `ItemSeparator` |
 | `empty` | `Empty`, `EmptyHeader`, `EmptyMedia`, `EmptyTitle`, `EmptyDescription`, `EmptyContent` (shadcn primitives; distinct from `feedback::EmptyState`) |
 | `native_select` | `NativeSelect`, `NativeSelectOption`, `NativeSelectOptGroup` (signal-driven styled `<select>`) |
+| `combobox` | `Combobox`, `ComboboxOption` — searchable single-select (trigger + popover with a filter input + substring-filtered list). Pure: fuzzy is a Rust case-insensitive `contains`, no web-sys/JS (cmdk's value, none of its deps). |
 
 ## Roadmap (M2 work-list)
 
@@ -131,12 +132,22 @@ token duplication remains.
 `input_group`, `field`, `item`, `empty`, `native_select`. With these, every
 shadcn component that ports cleanly to Leptos-only deps is now covered.
 
+**d2. `combobox` — done (pure Rust).** The cmdk gap split: a searchable
+single-select doesn't actually need cmdk — its useful core (filter a list as you
+type) is a Rust case-insensitive `contains`. `combobox.rs` reuses `select`'s
+open / `use_presence` / backdrop pattern, so it stays leptos-only + Send. The
+sibling `command` (⌘K palette) stays deferred: it's a *feature* (global `keydown`
+needs web-sys) more than a primitive.
+
 **d. Deliberately deferred (with reasons).** Each would push complexity or an
 extra dependency into a crate whose whole value is "leptos-only, portable, Send":
 - **JS-library-backed (no Leptos equivalent):** `calendar` (react-day-picker),
-  `carousel` (embla), `command`/`combobox` (cmdk), `drawer` (vaul — use `Sheet`),
-  `input-otp`, `form` (react-hook-form — Leptos forms differ), `sonner` (app has a
-  toast), `resizable` (react-resizable-panels).
+  `carousel` (embla), `command` (cmdk — ⌘K palette; needs a web-sys global keydown,
+  and it's a product feature not a primitive), `drawer` (vaul — use `Sheet`),
+  `input-otp` (no use case — auth is OAuth/session), `form` (react-hook-form —
+  Leptos forms differ; the settings `Field`+`SaveBar` pattern is kesulu's form),
+  `sonner` (app has a toast), `resizable` (react-resizable-panels; app has a fixed
+  shell). For a trading dashboard `carousel`/`input-otp`/`resizable` have ~no use case.
 - **Need `web-sys` for cursor / floating positioning / DOM measurement** (the
   crate deliberately excludes web-sys): `context-menu` (cursor x/y), `menubar`,
   `navigation-menu`, `sidebar` (also large + stateful; app has its own shell).
