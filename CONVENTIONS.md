@@ -82,8 +82,11 @@ kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
 | `dropdown` | `DropdownMenu`, `DropdownMenuItem`, `DropdownMenuSeparator` |
 | `tabs` | `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`, `RouteTabs`, `RouteTab` |
 | `data_display` | `Badge` (`BadgeVariant`), `DataTable` (`Column`, `ColumnAlign`), `TableHead`, `KPICard`, `CurrencyDisplay`, `ExpandableRow`, `Progress` |
-| `feedback` | `ErrorBanner`, `EmptyState`, `SkeletonBlock`, `Tooltip` |
-| `layout` | `Separator`, `PageHeader`, `SectionTitle`, `ScrollArea` |
+| `feedback` | `ErrorBanner`, `EmptyState`, `SkeletonBlock`, `Tooltip` (signal-driven, hover delay + focus a11y + presence fade) |
+| `layout` | `Separator`, `PageHeader`, `SectionTitle`, `SectionHeader` (title + actions slot), `ScrollArea` |
+| `presence` | `use_presence` / `Presence` — delayed-unmount helper powering enter/exit animations (no web-sys) |
+| `toast` | `Toaster`, `Toast`, `ToastLevel`, `ToastContainer` — provide `Toaster` near the root, mount `ToastContainer` once |
+| `save_bar` | `SaveBar` — sticky presence-animated dirty-state action bar (Ghost discard + primary save with loading) |
 | `popover` | `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverHeader`, `PopoverTitle`, `PopoverDescription` |
 | `select` | `Select`, `SelectTrigger`, `SelectValue`, `SelectContent`, `SelectLabel`, `SelectGroup`, `SelectItem`, `SelectSeparator` (distinct from `input::SelectInput`) |
 | `sheet` | `Sheet`, `SheetContent`, `SheetHeader`, `SheetFooter`, `SheetTitle`, `SheetDescription` (`SheetSide`) |
