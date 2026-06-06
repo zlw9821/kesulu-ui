@@ -73,15 +73,15 @@ kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
 | Module | Components |
 |---|---|
 | `accordion` | `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` (single-open) |
-| `alert` | `Alert` (`AlertVariant`), `AlertTitle`, `AlertDescription` |
+| `alert` | `Alert` (`AlertVariant`: Default/Destructive/Warning), `AlertTitle`, `AlertDescription` |
 | `button` | `Button` (`ButtonVariant`, `ButtonSize`) |
 | `radio_group` | `RadioGroup`, `RadioGroupItem` |
 | `card` | `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter` |
 | `input` | `TextInput`, `NumberInput`, `SelectInput`, `TextArea`, `Checkbox`, `Switch`, `Label` |
 | `dialog` | `Dialog`, `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogFooter`, `AlertDialog` |
 | `dropdown` | `DropdownMenu`, `DropdownMenuItem`, `DropdownMenuSeparator` |
-| `tabs` | `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`, `RouteTabs`, `RouteTab` |
-| `data_display` | `Badge` (`BadgeVariant`), `DataTable` (`Column`, `ColumnAlign`), `TableHead`, `KPICard`, `CurrencyDisplay`, `ExpandableRow`, `Progress` |
+| `tabs` | `Tabs` (`TabsVariant`: Pill/Underline), `TabsList`, `TabsTrigger`, `TabsContent`, `RouteTabs`, `RouteTab` |
+| `data_display` | `Badge` (`BadgeVariant`), `DataTable` (`Column`, `ColumnAlign`), `TableHead`, `KPICard` (`KpiSize`: Sm/Md/Lg + `bare` for joined/stat grids), `CurrencyDisplay`, `ExpandableRow`, `Progress` |
 | `feedback` | `ErrorBanner`, `EmptyState`, `SkeletonBlock`, `Tooltip` (signal-driven, hover delay + focus a11y + presence fade) |
 | `layout` | `Separator`, `PageHeader`, `SectionTitle`, `SectionHeader` (title + actions slot), `ScrollArea` |
 | `presence` | `use_presence` / `Presence` — delayed-unmount helper powering enter/exit animations (no web-sys) |
