@@ -5,6 +5,7 @@ pub enum AlertVariant {
     #[default]
     Default,
     Destructive,
+    Warning,
 }
 
 impl AlertVariant {
@@ -12,6 +13,7 @@ impl AlertVariant {
         match self {
             Self::Default => "bg-card border-border text-foreground",
             Self::Destructive => "border-destructive/50 bg-destructive/10 text-destructive",
+            Self::Warning => "border-warning/50 bg-warning/10 text-warning",
         }
     }
 }

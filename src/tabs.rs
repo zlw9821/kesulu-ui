@@ -80,24 +80,38 @@ pub fn RouteTabs(tabs: Vec<RouteTab>) -> impl IntoView {
     }
 }
 
+/// Visual style for [`Tabs`]. `Pill` is the shadcn default (muted segmented
+/// container); `Underline` is a flat underline strip that reads better on dense,
+/// dark surfaces where the muted pill nearly vanishes.
+#[derive(Default, Clone, Copy, PartialEq)]
+pub enum TabsVariant {
+    #[default]
+    Pill,
+    Underline,
+}
+
 #[component]
 pub fn Tabs(
     #[prop(into)] value: RwSignal<&'static str>,
+    #[prop(optional)] variant: TabsVariant,
     #[prop(optional, into)] class: String,
     children: Children,
 ) -> impl IntoView {
     provide_context(value);
+    provide_context(variant);
     view! { <div class=format!("flex flex-col {}", class)>{children()}</div> }
 }
 
 #[component]
 pub fn TabsList(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
-    view! {
-        <div class=format!(
-            "inline-flex h-9 items-center justify-start rounded-lg bg-muted p-1 text-muted-foreground {}",
-            class,
-        )>{children()}</div>
-    }
+    let variant = use_context::<TabsVariant>().unwrap_or_default();
+    let base = match variant {
+        TabsVariant::Pill => {
+            "inline-flex h-9 items-center justify-start rounded-lg bg-muted p-1 text-muted-foreground"
+        }
+        TabsVariant::Underline => "flex items-center gap-1 border-b border-border",
+    };
+    view! { <div class=format!("{base} {}", class)>{children()}</div> }
 }
 
 #[component]
@@ -107,20 +121,29 @@ pub fn TabsTrigger(
     children: Children,
 ) -> impl IntoView {
     let active_tab = expect_context::<RwSignal<&'static str>>();
+    let variant = use_context::<TabsVariant>().unwrap_or_default();
     let is_active = move || active_tab.get() == value;
     view! {
         <button
             on:click=move |_| active_tab.set(value)
             class=move || {
-                format!(
-                    "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring {} {}",
-                    if is_active() {
-                        "bg-background text-foreground shadow-sm"
-                    } else {
-                        "hover:text-foreground/80"
-                    },
-                    class,
-                )
+                let (base, active, inactive) = match variant {
+                    TabsVariant::Pill => {
+                        (
+                            "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                            "bg-background text-foreground shadow-sm",
+                            "hover:text-foreground/80",
+                        )
+                    }
+                    TabsVariant::Underline => {
+                        (
+                            "inline-flex items-center justify-center whitespace-nowrap -mb-px border-b-2 px-3.5 py-2 text-sm transition-colors focus-visible:outline-none",
+                            "border-accent text-foreground font-semibold",
+                            "border-transparent text-muted-foreground font-medium hover:text-foreground/80",
+                        )
+                    }
+                };
+                format!("{base} {} {}", if is_active() { active } else { inactive }, class)
             }
         >
             {children()}
