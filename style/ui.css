@@ -1,0 +1,69 @@
+/* ui crate — self-contained design tokens (shadcn/ui parity).
+ *
+ * External consumers: `@import "tailwindcss";` then `@import ".../ui/style/ui.css";`
+ * — the `@source` below makes Tailwind scan this crate's components, and the
+ * `@theme` block supplies every token they reference. Relative paths in
+ * `@source` resolve against THIS file, so it stays correct wherever imported. */
+
+@source "./src/**/*.rs";
+
+@theme {
+  /* === shadcn/ui standard tokens === */
+  --color-background: #111113;
+  --color-foreground: #FAFAFA;
+  --color-card: #18181B;
+  --color-card-foreground: #FAFAFA;
+  --color-popover: #1F1F23;
+  --color-popover-foreground: #FAFAFA;
+  --color-primary: #10B981;
+  --color-primary-foreground: #111113;
+  --color-secondary: #1F1F23;
+  --color-secondary-foreground: #FAFAFA;
+  --color-muted: #27272A;
+  --color-muted-foreground: #A1A1AA;
+  --color-accent: #10B981;
+  --color-accent-foreground: #111113;
+  --color-destructive: #EF4444;
+  --color-destructive-foreground: #FFFFFF;
+  --color-destructive-dim: rgba(239, 68, 68, 0.1);
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-input: rgba(255, 255, 255, 0.08);
+  --color-ring: #10B981;
+
+  /* === semantic colors (used by feedback primitives) === */
+  --color-success: #10B981;
+  --color-success-dim: rgba(16, 185, 129, 0.1);
+  --color-warning: #F59E0B;
+  --color-warning-dim: rgba(245, 158, 11, 0.1);
+  --color-info: #3B82F6;
+  --color-info-dim: rgba(59, 130, 246, 0.1);
+
+  /* === fonts === */
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* === radius === */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* === animation === */
+  --animate-fade-in: fadeIn 200ms ease-out;
+  --animate-slide-up: slideUp 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
