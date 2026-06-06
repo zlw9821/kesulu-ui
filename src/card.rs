@@ -4,7 +4,7 @@ use leptos::prelude::*;
 pub fn Card(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
     view! {
         <div class=format!(
-            "rounded-lg border border-border bg-card text-card-foreground shadow-sm {}",
+            "rounded-xl border border-border bg-card text-card-foreground shadow-sm {}",
             class,
         )>{children()}</div>
     }
