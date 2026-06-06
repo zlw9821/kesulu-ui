@@ -100,31 +100,52 @@ pub enum ColumnAlign {
     Center,
 }
 
+/// Value type-scale for `KPICard` — financial dashboards mix a few densities:
+/// `Lg` for the headline KPI strip, `Md` for tight metric grids, `Sm` for inline
+/// stat rows.
+#[derive(Default, Clone, Copy, PartialEq)]
+pub enum KpiSize {
+    Sm,
+    Md,
+    #[default]
+    Lg,
+}
+
+impl KpiSize {
+    fn value_class(self) -> &'static str {
+        match self {
+            KpiSize::Sm => "text-[15px]",
+            KpiSize::Md => "text-base",
+            KpiSize::Lg => "text-xl",
+        }
+    }
+}
+
+/// Label + mono value (+ optional sub) metric tile. By default a `bg-card` cell
+/// (drop it into a `gap-px bg-border` joined grid for hairline dividers); `bare`
+/// strips the chrome so it sits transparently inside an existing stat grid.
+/// `value_class` carries per-value color (e.g. `text-accent`); `class` is the
+/// root passthrough for density tweaks.
 #[component]
 pub fn KPICard(
     #[prop(into)] label: String,
     #[prop(into)] value: AnyView,
-    #[prop(into)] sub_label: AnyView,
+    #[prop(optional)] sub_label: Option<AnyView>,
+    #[prop(optional)] size: KpiSize,
+    #[prop(optional)] bare: bool,
     #[prop(into, optional)] value_class: String,
-    #[prop(optional)] compact: bool,
+    #[prop(into, optional)] class: String,
 ) -> impl IntoView {
-    let container_class = if compact {
-        "p-3 h-20 flex flex-col justify-between"
-    } else {
-        "p-5 hover:shadow-md hover:border-border-hover transition-all duration-200"
-    };
-
+    let chrome = if bare { "" } else { "bg-card px-4 py-3.5" };
     view! {
-        <div class=format!("rounded-lg border border-border bg-card shadow-sm {}", container_class)>
-            <div class="text-[10px] text-muted-foreground font-semibold uppercase tracking-wide mb-1">
-                {label}
-            </div>
-            <div>
-                <div class=format!("text-xl font-bold tracking-tight {}", value_class)>{value}</div>
-                <div class="text-[10px] text-muted-foreground/60 font-medium mt-1 truncate">
-                    {sub_label}
-                </div>
-            </div>
+        <div class=format!("{chrome} {}", class)>
+            <div class="text-[10px] text-muted-foreground tracking-wide mb-1">{label}</div>
+            <div class=format!(
+                "font-mono font-semibold {} {}",
+                size.value_class(),
+                value_class,
+            )>{value}</div>
+            {sub_label.map(|s| view! { <div class="font-mono text-[11px] mt-1">{s}</div> })}
         </div>
     }
 }
