@@ -34,18 +34,6 @@ pub fn Badge(
 }
 
 #[component]
-pub fn TableHead(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
-    view! {
-        <thead>
-            <tr class=format!(
-                "text-[10px] text-muted-foreground uppercase tracking-wider font-semibold border-b border-border {}",
-                class,
-            )>{children()}</tr>
-        </thead>
-    }
-}
-
-#[component]
 pub fn DataTable(
     #[prop(into)] columns: Vec<Column>,
     #[prop(optional, into)] class: String,

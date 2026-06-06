@@ -84,6 +84,20 @@ kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
 | `data_display` | `Badge` (`BadgeVariant`), `DataTable` (`Column`, `ColumnAlign`), `TableHead`, `KPICard`, `CurrencyDisplay`, `ExpandableRow`, `Progress` |
 | `feedback` | `ErrorBanner`, `EmptyState`, `SkeletonBlock`, `Tooltip` |
 | `layout` | `Separator`, `PageHeader`, `SectionTitle`, `ScrollArea` |
+| `popover` | `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverHeader`, `PopoverTitle`, `PopoverDescription` |
+| `select` | `Select`, `SelectTrigger`, `SelectValue`, `SelectContent`, `SelectLabel`, `SelectGroup`, `SelectItem`, `SelectSeparator` (distinct from `input::SelectInput`) |
+| `sheet` | `Sheet`, `SheetContent`, `SheetHeader`, `SheetFooter`, `SheetTitle`, `SheetDescription` (`SheetSide`) |
+| `avatar` | `Avatar`, `AvatarImage`, `AvatarFallback`, `AvatarBadge`, `AvatarGroup`, `AvatarGroupCount` |
+| `breadcrumb` | `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `BreadcrumbEllipsis` |
+| `pagination` | `Pagination`, `PaginationContent`, `PaginationItem`, `PaginationLink`, `PaginationPrevious`, `PaginationNext`, `PaginationEllipsis` |
+| `slider` | `Slider` (single-value, backed by a styled native `<input type=range>`) |
+| `table` | `Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableRow`, `TableHead` (the `<th>`), `TableCell`, `TableCaption` — shadcn primitives; the legacy `data_display::TableHead` (`<thead>` wrapper) was removed in favor of these |
+| `toggle` | `Toggle`, `ToggleGroup`, `ToggleGroupItem` |
+| `hover_card` | `HoverCard`, `HoverCardTrigger`, `HoverCardContent` |
+| `collapsible` | `Collapsible`, `CollapsibleTrigger`, `CollapsibleContent` |
+| `aspect_ratio` | `AspectRatio` |
+| `spinner` | `Spinner` |
+| `kbd` | `Kbd`, `KbdGroup` |
 
 ## Roadmap (M2 work-list)
 
@@ -91,18 +105,25 @@ kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
 `Badge`, `TableHead`, `ErrorBanner`, `EmptyState`, `Tooltip`, `PageHeader`,
 `SectionTitle` now all take `#[prop(optional, into)] class`.
 
-**b. Add high-frequency shadcn core components** still missing. Done as
-hand-written reference samples (the canonical patterns for the rest): `Alert`
-(variant), `RadioGroup` (context + signal + callback), `Accordion` (nested
-context + expand/collapse). Remaining, roughly in priority order: `Popover`
-(generic, factor out of dropdown/tooltip), `Tooltip` (signal-driven, replace
-hover-only), `Select` (richer than `SelectInput`), `Sheet`/`Drawer`, `Avatar`,
-`Breadcrumb`, `Pagination`, `Slider`, `Toast` (generalize app's toast), `Table`
-primitives (`TableRow`/`TableCell` to complement `DataTable`).
+**b. Add high-frequency shadcn core components** — **done** (hand-written samples
+`Alert`/`RadioGroup`/`Accordion`, then a workflow fan-out for: `popover`,
+`select`, `sheet`, `avatar`, `breadcrumb`, `pagination`, `slider`, `table`,
+`toggle`, `hover_card`, `collapsible`, `aspect_ratio`, `spinner`, `kbd`).
+Known simplifications carried by the fan-out (all per the exit-animation +
+no-Radix constraints): no exit animations (`<Show>` unmounts immediately); no
+roving-focus/keyboard nav (click-driven, `hover:` instead of `focus:` on menu
+items); Radix Portal/anchor floating-position dropped (popovers are statically
+positioned). These are the natural next polish items.
 
 **c. CSS cleanup (done in M2 step 1):** `main.css` now `@import`s `ui.css` — no
 token duplication remains.
 
-When fanning out (b) across agents: each agent authors **one new `src/<name>.rs`
+**d. Remaining / future:** signal-driven `Tooltip` (replace hover-only),
+generalized `Toast` (app has one), and the JS-backed / heavier components
+deliberately deferred: `Calendar`, `Command`/`Combobox`, `Sonner`, `Carousel`,
+`Chart` (out of scope — see boundaries above). A **presence/delayed-unmount
+helper** would unlock exit animations across popover/select/sheet/dialog.
+
+When fanning out across agents: each agent authors **one new `src/<name>.rs`
 only** and does **not** edit `lib.rs` or `ui.css`; the orchestrator merges the
 module list and any new tokens afterward to avoid conflicts.
