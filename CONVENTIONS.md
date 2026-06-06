@@ -44,6 +44,30 @@ they use (`fadeIn`, `slideUp`). A consumer wires the whole library with:
 
 kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
 
+## Scope boundaries & dependencies (decided for the fan-out)
+
+- **Source of truth:** translate from the real shadcn v4 source at
+  `references/ui/apps/v4/registry/new-york-v4/ui/<component>.tsx` (complete, exact
+  classes). The shadcn MCP is a discovery aid only — its `view` returns metadata,
+  not full source, and `search` needs a project `components.json` (we have none).
+- **Animations:** the CSS layer depends on **`tw-animate-css`** (installed), so
+  components use shadcn's exact `animate-in` / `animate-out` / `fade-in-0` /
+  `zoom-in-95` / `slide-in-from-*` classes — copy them verbatim from the source.
+  **Limitation:** *enter* animations work as-is; *exit* animations
+  (`data-[state=closed]:…`) need a presence/delayed-unmount helper because `<Show>`
+  unmounts immediately — defer exit animations until that helper exists.
+- **Icons:** inline the needed lucide SVG paths (as `checkbox`/`accordion` do).
+  **No icon dependency.**
+- **Charts:** **out of scope for `ui`** — charting needs wasm-bindgen/JS interop
+  (kesulu uses lightweight-charts via `app`'s `chart_bindings.rs`) and shadcn's own
+  Chart is just a Recharts theme wrapper. `ui` may provide a `Card` to frame a
+  chart, never the chart engine. A separate `ui-charts` crate is a future option,
+  not now.
+- **Tables:** ship the shadcn **presentational primitives** only (`Table`,
+  `TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`, `TableCaption`)
+  — zero deps. Data-grid behaviour (sort/filter/paginate/virtualize, the TanStack
+  recipe) is **app-level composition**, not a `ui` component.
+
 ## Current inventory (read the source for exact props)
 
 | Module | Components |

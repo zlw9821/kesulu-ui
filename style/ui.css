@@ -3,7 +3,13 @@
  * External consumers: `@import "tailwindcss";` then `@import ".../ui/style/ui.css";`
  * — the `@source` below makes Tailwind scan this crate's components, and the
  * `@theme` block supplies every token they reference. Relative paths in
- * `@source` resolve against THIS file, so it stays correct wherever imported. */
+ * `@source` resolve against THIS file, so it stays correct wherever imported.
+ *
+ * CSS-layer dependency: `tw-animate-css` (provides shadcn's `animate-in` /
+ * `fade-in-0` / `zoom-in-95` / `slide-in-from-*` utilities). Consumers must have
+ * it installed (`pnpm add tw-animate-css`); resolved from node_modules. */
+
+@import "tw-animate-css";
 
 @source "./src/**/*.rs";
 
