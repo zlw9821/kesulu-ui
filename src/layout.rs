@@ -22,10 +22,11 @@ pub fn Separator(
 pub fn PageHeader(
     #[prop(into)] title: String,
     #[prop(optional, into)] subtitle: String,
+    #[prop(optional, into)] class: String,
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     view! {
-        <div class="flex items-center justify-between">
+        <div class=format!("flex items-center justify-between {}", class)>
             <div>
                 <h1 class="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
                 {(!subtitle.is_empty())
@@ -41,9 +42,13 @@ pub fn PageHeader(
 }
 
 #[component]
-pub fn SectionTitle(#[prop(into)] title: String, #[prop(into)] subtitle: String) -> impl IntoView {
+pub fn SectionTitle(
+    #[prop(into)] title: String,
+    #[prop(into)] subtitle: String,
+    #[prop(optional, into)] class: String,
+) -> impl IntoView {
     view! {
-        <div class="mb-5">
+        <div class=format!("mb-5 {}", class)>
             <h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                 {title}
             </h3>

@@ -48,7 +48,10 @@ kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
 
 | Module | Components |
 |---|---|
+| `accordion` | `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` (single-open) |
+| `alert` | `Alert` (`AlertVariant`), `AlertTitle`, `AlertDescription` |
 | `button` | `Button` (`ButtonVariant`, `ButtonSize`) |
+| `radio_group` | `RadioGroup`, `RadioGroupItem` |
 | `card` | `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter` |
 | `input` | `TextInput`, `NumberInput`, `SelectInput`, `TextArea`, `Checkbox`, `Switch`, `Label` |
 | `dialog` | `Dialog`, `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogFooter`, `AlertDialog` |
@@ -60,16 +63,18 @@ kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
 
 ## Roadmap (M2 work-list)
 
-**a. Close `class`-passthrough gaps** (rule 3) on existing components currently
-missing it: `Badge`, `TableHead`, `ErrorBanner`, `EmptyState`, `Tooltip`,
-`PageHeader`, `SectionTitle`.
+**a. Close `class`-passthrough gaps** (rule 3) on existing components — **done**:
+`Badge`, `TableHead`, `ErrorBanner`, `EmptyState`, `Tooltip`, `PageHeader`,
+`SectionTitle` now all take `#[prop(optional, into)] class`.
 
-**b. Add high-frequency shadcn core components** still missing, roughly in
-priority order: `Alert`, `Badge`-dot/`Separator` variants, `Popover` (generic,
-factor out of dropdown/tooltip), `Tooltip` (signal-driven, replace hover-only),
-`Select` (richer than `SelectInput`), `RadioGroup`, `Accordion`, `Sheet`/`Drawer`,
-`Avatar`, `Breadcrumb`, `Pagination`, `Slider`, `Toast` (generalize app's toast),
-`Table` primitives (`TableRow`/`TableCell` to complement `DataTable`).
+**b. Add high-frequency shadcn core components** still missing. Done as
+hand-written reference samples (the canonical patterns for the rest): `Alert`
+(variant), `RadioGroup` (context + signal + callback), `Accordion` (nested
+context + expand/collapse). Remaining, roughly in priority order: `Popover`
+(generic, factor out of dropdown/tooltip), `Tooltip` (signal-driven, replace
+hover-only), `Select` (richer than `SelectInput`), `Sheet`/`Drawer`, `Avatar`,
+`Breadcrumb`, `Pagination`, `Slider`, `Toast` (generalize app's toast), `Table`
+primitives (`TableRow`/`TableCell` to complement `DataTable`).
 
 **c. CSS cleanup (done in M2 step 1):** `main.css` now `@import`s `ui.css` — no
 token duplication remains.

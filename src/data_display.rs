@@ -12,7 +12,11 @@ pub enum BadgeVariant {
 }
 
 #[component]
-pub fn Badge(#[prop(into)] text: String, #[prop(optional)] variant: BadgeVariant) -> impl IntoView {
+pub fn Badge(
+    #[prop(into)] text: String,
+    #[prop(optional)] variant: BadgeVariant,
+    #[prop(optional, into)] class: String,
+) -> impl IntoView {
     let variant_class = match variant {
         BadgeVariant::Neutral => "border-border bg-secondary text-secondary-foreground",
         BadgeVariant::Success => "border-transparent bg-success-dim text-success",
@@ -22,19 +26,21 @@ pub fn Badge(#[prop(into)] text: String, #[prop(optional)] variant: BadgeVariant
     };
     view! {
         <span class=format!(
-            "inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-semibold transition-colors {}",
+            "inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-semibold transition-colors {} {}",
             variant_class,
+            class,
         )>{text}</span>
     }
 }
 
 #[component]
-pub fn TableHead(children: Children) -> impl IntoView {
+pub fn TableHead(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
     view! {
         <thead>
-            <tr class="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold border-b border-border">
-                {children()}
-            </tr>
+            <tr class=format!(
+                "text-[10px] text-muted-foreground uppercase tracking-wider font-semibold border-b border-border {}",
+                class,
+            )>{children()}</tr>
         </thead>
     }
 }

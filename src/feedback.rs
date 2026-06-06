@@ -5,10 +5,14 @@ pub fn ErrorBanner(
     #[prop(into)] visible: Signal<bool>,
     #[prop(optional, into)] message: MaybeProp<String>,
     #[prop(optional, into)] on_retry: Option<Callback<()>>,
+    #[prop(optional, into)] class: String,
 ) -> impl IntoView {
     view! {
         <Show when=move || visible.get()>
-            <div class="flex items-center gap-3 px-4 py-3 rounded-lg border border-destructive/50 bg-destructive/10 text-destructive text-sm font-medium">
+            <div class=format!(
+                "flex items-center gap-3 px-4 py-3 rounded-lg border border-destructive/50 bg-destructive/10 text-destructive text-sm font-medium {}",
+                class,
+            )>
                 <svg
                     class="w-4 h-4 shrink-0"
                     viewBox="0 0 24 24"
@@ -61,10 +65,11 @@ pub fn EmptyState(
     #[prop(into)] icon: AnyView,
     #[prop(into)] title: String,
     #[prop(optional, into)] description: String,
+    #[prop(optional, into)] class: String,
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     view! {
-        <div class="flex flex-col items-center justify-center py-16 px-4">
+        <div class=format!("flex flex-col items-center justify-center py-16 px-4 {}", class)>
             <div class="text-muted-foreground/40 mb-4">{icon}</div>
             <h3 class="text-sm font-semibold text-foreground mb-1">{title}</h3>
             {(!description.is_empty())
@@ -85,9 +90,16 @@ pub fn EmptyState(
 }
 
 #[component]
-pub fn Tooltip(#[prop(into)] content: String, children: Children) -> impl IntoView {
+pub fn Tooltip(
+    #[prop(into)] content: String,
+    #[prop(optional, into)] class: String,
+    children: Children,
+) -> impl IntoView {
     view! {
-        <div class="relative group inline-flex">
+        <div class=format!(
+            "relative group inline-flex {}",
+            class,
+        )>
             {children()}
             <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-popover border border-border rounded-md shadow-md text-xs text-popover-foreground whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
                 {content}
