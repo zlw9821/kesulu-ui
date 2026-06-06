@@ -41,6 +41,25 @@ pub fn PageHeader(
     }
 }
 
+/// Section header: an uppercase label with an optional right-aligned actions
+/// slot (buttons, badges, links). Generic — the reusable form of the app's old
+/// `SectionLabel`.
+#[component]
+pub fn SectionHeader(
+    #[prop(into)] title: String,
+    #[prop(optional)] actions: Option<ViewFnOnce>,
+    #[prop(optional, into)] class: String,
+) -> impl IntoView {
+    view! {
+        <div class=format!("flex items-center justify-between mb-2.5 {}", class)>
+            <h3 class="text-[11px] font-semibold tracking-[0.06em] uppercase text-muted-foreground">
+                {title}
+            </h3>
+            {actions.map(|a| a.run())}
+        </div>
+    }
+}
+
 #[component]
 pub fn SectionTitle(
     #[prop(into)] title: String,
