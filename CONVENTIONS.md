@@ -98,6 +98,12 @@ kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
 | `aspect_ratio` | `AspectRatio` |
 | `spinner` | `Spinner` |
 | `kbd` | `Kbd`, `KbdGroup` |
+| `button_group` | `ButtonGroup`, `ButtonGroupText`, `ButtonGroupSeparator` |
+| `input_group` | `InputGroup`, `InputGroupAddon`, `InputGroupButton`, `InputGroupText`, `InputGroupInput`, `InputGroupTextarea` |
+| `field` | `Field`, `FieldSet`, `FieldLegend`, `FieldGroup`, `FieldContent`, `FieldLabel`, `FieldTitle`, `FieldDescription`, `FieldSeparator`, `FieldError` |
+| `item` | `Item`, `ItemGroup`, `ItemMedia`, `ItemContent`, `ItemTitle`, `ItemDescription`, `ItemActions`, `ItemHeader`, `ItemFooter`, `ItemSeparator` |
+| `empty` | `Empty`, `EmptyHeader`, `EmptyMedia`, `EmptyTitle`, `EmptyDescription`, `EmptyContent` (shadcn primitives; distinct from `feedback::EmptyState`) |
+| `native_select` | `NativeSelect`, `NativeSelectOption`, `NativeSelectOptGroup` (signal-driven styled `<select>`) |
 
 ## Roadmap (M2 work-list)
 
@@ -118,11 +124,26 @@ positioned). These are the natural next polish items.
 **c. CSS cleanup (done in M2 step 1):** `main.css` now `@import`s `ui.css` — no
 token duplication remains.
 
-**d. Remaining / future:** signal-driven `Tooltip` (replace hover-only),
-generalized `Toast` (app has one), and the JS-backed / heavier components
-deliberately deferred: `Calendar`, `Command`/`Combobox`, `Sonner`, `Carousel`,
-`Chart` (out of scope — see boundaries above). A **presence/delayed-unmount
-helper** would unlock exit animations across popover/select/sheet/dialog.
+**c2. Second fan-out — done:** pure-presentational primitives `button_group`,
+`input_group`, `field`, `item`, `empty`, `native_select`. With these, every
+shadcn component that ports cleanly to Leptos-only deps is now covered.
+
+**d. Deliberately deferred (with reasons).** Each would push complexity or an
+extra dependency into a crate whose whole value is "leptos-only, portable, Send":
+- **JS-library-backed (no Leptos equivalent):** `calendar` (react-day-picker),
+  `carousel` (embla), `command`/`combobox` (cmdk), `drawer` (vaul — use `Sheet`),
+  `input-otp`, `form` (react-hook-form — Leptos forms differ), `sonner` (app has a
+  toast), `resizable` (react-resizable-panels).
+- **Need `web-sys` for cursor / floating positioning / DOM measurement** (the
+  crate deliberately excludes web-sys): `context-menu` (cursor x/y), `menubar`,
+  `navigation-menu`, `sidebar` (also large + stateful; app has its own shell).
+  → Revisit only behind a controlled optional `web-sys` feature, decided separately.
+- **Out of scope:** `chart` (charting lives in `app` via lightweight-charts).
+- **N/A:** `direction` (RTL provider, not a visual component).
+
+**e. Future polish (no new deps):** signal-driven `Tooltip` (replace hover-only),
+generalized `Toast`, and a **presence/delayed-unmount helper** to unlock *exit*
+animations across popover/select/sheet/dialog.
 
 When fanning out across agents: each agent authors **one new `src/<name>.rs`
 only** and does **not** edit `lib.rs` or `ui.css`; the orchestrator merges the
