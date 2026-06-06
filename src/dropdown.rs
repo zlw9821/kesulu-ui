@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 
+use super::presence::use_presence;
+
 #[component]
 pub fn DropdownMenu(
     #[prop(into)] trigger: AnyView,
@@ -7,14 +9,22 @@ pub fn DropdownMenu(
     children: ChildrenFn,
 ) -> impl IntoView {
     let (open, set_open) = signal(false);
+    let p = use_presence(open.into(), 150);
     view! {
         <div class=format!("relative inline-block {}", class)>
             <div on:click=move |_| set_open.update(|v| *v = !*v)>{trigger}</div>
-            <Show when=move || open.get()>
+            <Show when=move || p.mounted.get()>
                 <div class="fixed inset-0 z-40" on:click=move |_| set_open.set(false)></div>
-                <div class="absolute right-0 top-full z-50 mt-1 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md animate-fade-in">
-                    {children()}
-                </div>
+                <div class=move || {
+                    format!(
+                        "absolute right-0 top-full z-50 mt-1 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md duration-150 {}",
+                        if p.open.get() {
+                            "animate-in fade-in-0 zoom-in-95"
+                        } else {
+                            "animate-out fade-out-0 zoom-out-95"
+                        },
+                    )
+                }>{children()}</div>
             </Show>
         </div>
     }

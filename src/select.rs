@@ -1,6 +1,8 @@
 use leptos::children::ChildrenFn;
 use leptos::prelude::*;
 
+use super::presence::use_presence;
+
 /// Trigger size — shadcn's `data-[size=…]` heights.
 #[derive(Default, Clone, Copy, PartialEq)]
 pub enum SelectSize {
@@ -109,14 +111,23 @@ pub fn SelectValue(#[prop(optional, into)] placeholder: String) -> impl IntoView
 #[component]
 pub fn SelectContent(#[prop(optional, into)] class: String, children: ChildrenFn) -> impl IntoView {
     let ctx = expect_context::<SelectCtx>();
+    let p = use_presence(ctx.open.into(), 150);
+    let class = StoredValue::new(class);
     view! {
-        <Show when=move || ctx.open.get()>
+        <Show when=move || p.mounted.get()>
             // Click-outside-to-close backdrop (see dropdown.rs).
             <div class="fixed inset-0 z-40" on:click=move |_| ctx.open.set(false)></div>
-            <div class=format!(
-                "absolute left-0 top-full z-50 mt-1 max-h-96 min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 {}",
-                class,
-            )>
+            <div class=move || {
+                format!(
+                    "absolute left-0 top-full z-50 mt-1 max-h-96 min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md duration-150 {} {}",
+                    if p.open.get() {
+                        "animate-in fade-in-0 zoom-in-95 slide-in-from-top-2"
+                    } else {
+                        "animate-out fade-out-0 zoom-out-95 slide-out-to-top-2"
+                    },
+                    class.get_value(),
+                )
+            }>
                 <div class="p-1">{children()}</div>
             </div>
         </Show>

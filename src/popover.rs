@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 
+use super::presence::use_presence;
+
 /// Shared open state for a `Popover`, consumed by `PopoverTrigger` /
 /// `PopoverContent` via context (the project's Radix-context analogue — see
 /// CONVENTIONS rule 5).
@@ -33,15 +35,24 @@ pub fn PopoverContent(
     children: ChildrenFn,
 ) -> impl IntoView {
     let ctx = expect_context::<PopoverCtx>();
+    let p = use_presence(ctx.open.into(), 150);
+    let class = StoredValue::new(class);
     view! {
-        <Show when=move || ctx.open.get()>
+        <Show when=move || p.mounted.get()>
             // Click-outside overlay (see dropdown.rs).
             <div class="fixed inset-0 z-40" on:click=move |_| ctx.open.set(false)></div>
             <div
-                class=format!(
-                    "absolute left-1/2 top-full z-50 mt-1 w-72 -translate-x-1/2 rounded-md border border-border bg-popover p-4 text-popover-foreground shadow-md outline-none animate-in fade-in-0 zoom-in-95 {}",
-                    class,
-                )
+                class=move || {
+                    format!(
+                        "absolute left-1/2 top-full z-50 mt-1 w-72 -translate-x-1/2 rounded-md border border-border bg-popover p-4 text-popover-foreground shadow-md outline-none duration-150 {} {}",
+                        if p.open.get() {
+                            "animate-in fade-in-0 zoom-in-95"
+                        } else {
+                            "animate-out fade-out-0 zoom-out-95"
+                        },
+                        class.get_value(),
+                    )
+                }
                 on:click=|ev| ev.stop_propagation()
             >
                 {children()}

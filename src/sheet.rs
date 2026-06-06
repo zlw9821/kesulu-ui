@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 
+use super::presence::use_presence;
+
 /// Edge the sheet slides in from. Mirrors shadcn's `side` prop.
 #[derive(Default, Clone, Copy, PartialEq)]
 pub enum SheetSide {
@@ -11,38 +13,44 @@ pub enum SheetSide {
 }
 
 impl SheetSide {
-    /// Position, sizing, border and enter-animation classes for the content
-    /// panel. Exit animations are dropped (see crate CONVENTIONS — `<Show>`
-    /// unmounts immediately).
-    fn classes(self) -> &'static str {
+    /// Static position / sizing / border classes for the content panel.
+    fn base(self) -> &'static str {
         match self {
-            SheetSide::Right => {
-                "inset-y-0 right-0 h-full w-3/4 border-l border-border \
-                 animate-in slide-in-from-right duration-500 sm:max-w-sm"
-            }
-            SheetSide::Left => {
-                "inset-y-0 left-0 h-full w-3/4 border-r border-border \
-                 animate-in slide-in-from-left duration-500 sm:max-w-sm"
-            }
-            SheetSide::Top => {
-                "inset-x-0 top-0 h-auto border-b border-border \
-                 animate-in slide-in-from-top duration-500"
-            }
-            SheetSide::Bottom => {
-                "inset-x-0 bottom-0 h-auto border-t border-border \
-                 animate-in slide-in-from-bottom duration-500"
-            }
+            SheetSide::Right => "inset-y-0 right-0 h-full w-3/4 border-l border-border sm:max-w-sm",
+            SheetSide::Left => "inset-y-0 left-0 h-full w-3/4 border-r border-border sm:max-w-sm",
+            SheetSide::Top => "inset-x-0 top-0 h-auto border-b border-border",
+            SheetSide::Bottom => "inset-x-0 bottom-0 h-auto border-t border-border",
+        }
+    }
+
+    /// Direction-aware enter (`open`) / exit (`!open`) animation classes.
+    fn anim(self, open: bool) -> &'static str {
+        match (self, open) {
+            (SheetSide::Right, true) => "animate-in slide-in-from-right",
+            (SheetSide::Right, false) => "animate-out slide-out-to-right",
+            (SheetSide::Left, true) => "animate-in slide-in-from-left",
+            (SheetSide::Left, false) => "animate-out slide-out-to-left",
+            (SheetSide::Top, true) => "animate-in slide-in-from-top",
+            (SheetSide::Top, false) => "animate-out slide-out-to-top",
+            (SheetSide::Bottom, true) => "animate-in slide-in-from-bottom",
+            (SheetSide::Bottom, false) => "animate-out slide-out-to-bottom",
         }
     }
 }
 
 #[component]
 pub fn Sheet(#[prop(into)] open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
+    let p = use_presence(open.into(), 500);
     view! {
-        <Show when=move || open.get()>
+        <Show when=move || p.mounted.get()>
             // Overlay
             <div
-                class="fixed inset-0 z-50 bg-black/50 animate-in fade-in-0"
+                class=move || {
+                    format!(
+                        "fixed inset-0 z-50 bg-black/50 {}",
+                        if p.open.get() { "animate-in fade-in-0" } else { "animate-out fade-out-0" },
+                    )
+                }
                 on:click=move |_| open.set(false)
             ></div>
             {children()}
@@ -64,8 +72,9 @@ pub fn SheetContent(
         <div
             class=move || {
                 format!(
-                    "fixed z-50 flex flex-col gap-4 bg-background shadow-lg transition ease-in-out {} {}",
-                    side.classes(),
+                    "fixed z-50 flex flex-col gap-4 bg-background shadow-lg transition ease-in-out duration-500 {} {} {}",
+                    side.base(),
+                    side.anim(open.get()),
                     class.get_value(),
                 )
             }

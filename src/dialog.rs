@@ -3,6 +3,7 @@ use std::sync::Arc;
 use leptos::prelude::*;
 
 use super::button::{Button, ButtonVariant};
+use super::presence::use_presence;
 
 #[derive(Clone, Copy)]
 pub struct DialogState(pub RwSignal<bool>);
@@ -33,18 +34,37 @@ impl DialogState {
 
 #[component]
 pub fn Dialog(#[prop(into)] open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
+    let p = use_presence(open.into(), 200);
     view! {
-        <Show when=move || open.get()>
+        <Show when=move || p.mounted.get()>
             <div class="fixed inset-0 z-50">
                 // Overlay
                 <div
-                    class="fixed inset-0 bg-black/80 animate-fade-in"
+                    class=move || {
+                        format!(
+                            "fixed inset-0 bg-black/80 {}",
+                            if p.open.get() {
+                                "animate-in fade-in-0"
+                            } else {
+                                "animate-out fade-out-0"
+                            },
+                        )
+                    }
                     on:click=move |_| open.set(false)
                 ></div>
                 // Content container
                 <div class="fixed inset-0 flex items-center justify-center p-4">
                     <div
-                        class="relative z-50 w-full max-w-lg rounded-lg border border-border bg-card p-6 shadow-lg animate-slide-up"
+                        class=move || {
+                            format!(
+                                "relative z-50 w-full max-w-lg rounded-lg border border-border bg-card p-6 shadow-lg duration-200 {}",
+                                if p.open.get() {
+                                    "animate-in fade-in-0 zoom-in-95"
+                                } else {
+                                    "animate-out fade-out-0 zoom-out-95"
+                                },
+                            )
+                        }
                         on:click=|ev| ev.stop_propagation()
                     >
                         {children()}
@@ -109,12 +129,27 @@ pub fn AlertDialog(
     });
     let title = StoredValue::new(title);
     let description = StoredValue::new(description);
+    let p = use_presence(open.into(), 200);
     view! {
-        <Show when=move || open.get()>
+        <Show when=move || p.mounted.get()>
             <div class="fixed inset-0 z-50">
-                <div class="fixed inset-0 bg-black/80 animate-fade-in"></div>
+                <div class=move || {
+                    format!(
+                        "fixed inset-0 bg-black/80 {}",
+                        if p.open.get() { "animate-in fade-in-0" } else { "animate-out fade-out-0" },
+                    )
+                }></div>
                 <div class="fixed inset-0 flex items-center justify-center p-4">
-                    <div class="relative z-50 w-full max-w-md rounded-lg border border-border bg-card p-6 shadow-lg animate-slide-up">
+                    <div class=move || {
+                        format!(
+                            "relative z-50 w-full max-w-md rounded-lg border border-border bg-card p-6 shadow-lg duration-200 {}",
+                            if p.open.get() {
+                                "animate-in fade-in-0 zoom-in-95"
+                            } else {
+                                "animate-out fade-out-0 zoom-out-95"
+                            },
+                        )
+                    }>
                         <div class="flex flex-col space-y-2 text-center sm:text-left">
                             <h2 class="text-lg font-semibold text-foreground">
                                 {title.get_value()}
