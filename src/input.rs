@@ -71,6 +71,11 @@ pub fn NumberInput(
                 <input
                     type="text"
                     inputmode="decimal"
+                    // Bind the `value` attribute (SSR-rendered + reactive) rather than
+                    // `prop:value`: a client-only property does not hydrate inside
+                    // streamed `<Suspense>` content, leaving the field blank on
+                    // resource-backed pages. `prop:value` keeps it controlled on top.
+                    value=move || buffer.get()
                     prop:value=move || buffer.get()
                     class="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     on:input=move |ev| {
