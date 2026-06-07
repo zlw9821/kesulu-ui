@@ -90,6 +90,13 @@ pub enum TabsVariant {
     Underline,
 }
 
+/// Active-tab signal shared via context. A dedicated newtype (not a bare
+/// `RwSignal<&'static str>`) so an ancestor that happens to `provide_context` an
+/// unrelated `RwSignal<&'static str>` can't be silently picked up here — context
+/// is keyed by type, and every other primitive in this crate uses its own newtype.
+#[derive(Clone, Copy)]
+struct TabsValue(RwSignal<&'static str>);
+
 #[component]
 pub fn Tabs(
     #[prop(into)] value: RwSignal<&'static str>,
@@ -97,7 +104,7 @@ pub fn Tabs(
     #[prop(optional, into)] class: String,
     children: Children,
 ) -> impl IntoView {
-    provide_context(value);
+    provide_context(TabsValue(value));
     provide_context(variant);
     view! { <div class=format!("flex flex-col {}", class)>{children()}</div> }
 }
@@ -120,7 +127,7 @@ pub fn TabsTrigger(
     #[prop(optional, into)] class: String,
     children: Children,
 ) -> impl IntoView {
-    let active_tab = expect_context::<RwSignal<&'static str>>();
+    let active_tab = expect_context::<TabsValue>().0;
     let variant = use_context::<TabsVariant>().unwrap_or_default();
     let is_active = move || active_tab.get() == value;
     view! {
@@ -157,7 +164,7 @@ pub fn TabsContent(
     #[prop(optional, into)] class: String,
     children: ChildrenFn,
 ) -> impl IntoView {
-    let active_tab = expect_context::<RwSignal<&'static str>>();
+    let active_tab = expect_context::<TabsValue>().0;
     let visited = RwSignal::new(active_tab.get_untracked() == value);
     Effect::new(move |_| {
         if active_tab.get() == value {
