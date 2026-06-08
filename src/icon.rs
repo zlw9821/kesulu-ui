@@ -45,6 +45,8 @@ pub enum IconName {
     LogOut,
     /// lucide `user`
     User,
+    /// lucide `panel-left`
+    PanelLeft,
 }
 
 impl IconName {
@@ -158,6 +160,13 @@ impl IconName {
                 <g>
                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                     <circle cx="12" cy="7" r="4" />
+                </g>
+            }
+            .into_any(),
+            Self::PanelLeft => view! {
+                <g>
+                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                    <path d="M9 3v18" />
                 </g>
             }
             .into_any(),
