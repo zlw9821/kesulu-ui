@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 
+use super::icon::{Icon, IconName};
+
 /// Single-open accordion state, shared with every item via context.
 #[derive(Clone, Copy)]
 struct AccordionCtx {
@@ -78,22 +80,14 @@ pub fn AccordionTrigger(
             )
         >
             {children()}
-            <svg
-                class=move || {
-                    format!(
-                        "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 {}",
-                        if is_open.get() { "rotate-180" } else { "" },
-                    )
-                }
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            >
-                <polyline points="6 9 12 15 18 9" />
-            </svg>
+            <span class=move || {
+                format!(
+                    "inline-flex shrink-0 text-muted-foreground transition-transform duration-200 {}",
+                    if is_open.get() { "rotate-180" } else { "" },
+                )
+            }>
+                <Icon name=IconName::ChevronDown class="h-4 w-4" />
+            </span>
         </button>
     }
 }

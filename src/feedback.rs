@@ -2,6 +2,7 @@ use std::time::Duration;
 
 use leptos::prelude::*;
 
+use super::icon::{Icon, IconName};
 use super::presence::use_presence;
 
 #[component]
@@ -17,17 +18,7 @@ pub fn ErrorBanner(
                 "flex items-center gap-3 px-4 py-3 rounded-lg border border-destructive/50 bg-destructive/10 text-destructive text-sm font-medium {}",
                 class,
             )>
-                <svg
-                    class="w-4 h-4 shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
+                <Icon name=IconName::CircleAlert class="w-4 h-4 shrink-0" />
                 <span class="flex-1">{move || message.get().unwrap_or_default()}</span>
                 {on_retry
                     .map(|cb| {

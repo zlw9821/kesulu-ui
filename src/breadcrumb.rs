@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 
+use super::icon::{Icon, IconName};
+
 #[component]
 pub fn Breadcrumb(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
     view! {
@@ -60,21 +62,7 @@ pub fn BreadcrumbSeparator(
         <li role="presentation" aria-hidden="true" class=format!("[&>svg]:size-3.5 {}", class)>
             {match children {
                 Some(children) => children().into_any(),
-                None => {
-                    view! {
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-                            <path d="m9 18 6-6-6-6" />
-                        </svg>
-                    }
-                        .into_any()
-                }
+                None => view! { <Icon name=IconName::ChevronRight class="size-3.5" /> }.into_any(),
             }}
         </li>
     }
@@ -88,19 +76,7 @@ pub fn BreadcrumbEllipsis(#[prop(optional, into)] class: String) -> impl IntoVie
             aria-hidden="true"
             class=format!("flex size-9 items-center justify-center {}", class)
         >
-            <svg
-                class="size-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            >
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="19" cy="12" r="1" />
-                <circle cx="5" cy="12" r="1" />
-            </svg>
+            <Icon name=IconName::Ellipsis />
             <span class="sr-only">"More"</span>
         </span>
     }

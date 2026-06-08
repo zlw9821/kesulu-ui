@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 
+use super::icon::{Icon, IconName};
 use super::presence::use_presence;
 
 /// One selectable option: `value` is the stable key emitted on select, `label`
@@ -88,17 +89,7 @@ pub fn Combobox(
                             .unwrap_or_else(|| placeholder.get_value())
                     }}
                 </span>
-                <svg
-                    class="size-4 shrink-0 opacity-50"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <polyline points="6 9 12 15 18 9" />
-                </svg>
+                <Icon name=IconName::ChevronDown class="size-4 shrink-0 opacity-50" />
             </button>
             <Show when=move || p.mounted.get()>
                 // Click-outside-to-close backdrop (see select.rs / dropdown.rs).
@@ -114,18 +105,7 @@ pub fn Combobox(
                     )
                 }>
                     <div class="flex h-9 items-center gap-2 border-b border-border px-3">
-                        <svg
-                            class="size-4 shrink-0 opacity-50"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.3-4.3" />
-                        </svg>
+                        <Icon name=IconName::Search class="size-4 shrink-0 opacity-50" />
                         <input
                             type="text"
                             value=move || query.get()
@@ -168,17 +148,7 @@ pub fn Combobox(
                                             >
                                                 <span class="absolute right-2 flex size-3.5 items-center justify-center">
                                                     <Show when=move || selected.get()>
-                                                        <svg
-                                                            class="size-4"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            stroke-width="2"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                        >
-                                                            <polyline points="20 6 9 17 4 12" />
-                                                        </svg>
+                                                        <Icon name=IconName::Check />
                                                     </Show>
                                                 </span>
                                                 {label}

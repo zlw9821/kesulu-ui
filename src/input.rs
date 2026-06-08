@@ -1,6 +1,8 @@
 use leptos::html::Textarea;
 use leptos::prelude::*;
 
+use super::icon::{Icon, IconName};
+
 #[component]
 pub fn TextInput(
     #[prop(into)] value: Signal<String>,
@@ -310,17 +312,7 @@ pub fn Checkbox(
                 }
             >
                 <Show when=move || checked.get()>
-                    <svg
-                        class="h-3 w-3 mx-auto"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <polyline points="20 6 9 17 4 12" />
-                    </svg>
+                    <Icon name=IconName::Check class="h-3 w-3 mx-auto" stroke_width="3" />
                 </Show>
             </button>
             {(!label.is_empty())

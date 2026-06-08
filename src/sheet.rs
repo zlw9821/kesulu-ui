@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 
+use super::icon::{Icon, IconName};
 use super::presence::use_presence;
 
 /// Edge the sheet slides in from. Mirrors shadcn's `side` prop.
@@ -87,18 +88,7 @@ pub fn SheetContent(
                     on:click=move |_| open.set(false)
                     class="absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
                 >
-                    <svg
-                        class="size-4"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path d="M18 6 6 18" />
-                        <path d="m6 6 12 12" />
-                    </svg>
+                    <Icon name=IconName::X />
                     <span class="sr-only">"Close"</span>
                 </button>
             </Show>

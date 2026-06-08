@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 
+use super::icon::{Icon, IconName};
+
 /// Root `<nav>` wrapper, centered and full-width.
 #[component]
 pub fn Pagination(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
@@ -88,17 +90,7 @@ pub fn PaginationPrevious(
             attr:aria-label="Go to previous page"
             class=format!("gap-1 px-2.5 sm:pl-2.5 {}", class)
         >
-            <svg
-                class="size-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            >
-                <path d="m15 18-6-6 6-6" />
-            </svg>
+            <Icon name=IconName::ChevronLeft />
             <span class="hidden sm:block">Previous</span>
         </PaginationLink>
     }
@@ -118,17 +110,7 @@ pub fn PaginationNext(
             class=format!("gap-1 px-2.5 sm:pr-2.5 {}", class)
         >
             <span class="hidden sm:block">Next</span>
-            <svg
-                class="size-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            >
-                <path d="m9 18 6-6-6-6" />
-            </svg>
+            <Icon name=IconName::ChevronRight />
         </PaginationLink>
     }
 }
@@ -138,19 +120,7 @@ pub fn PaginationNext(
 pub fn PaginationEllipsis(#[prop(optional, into)] class: String) -> impl IntoView {
     view! {
         <span aria-hidden="true" class=format!("flex size-9 items-center justify-center {}", class)>
-            <svg
-                class="size-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            >
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="19" cy="12" r="1" />
-                <circle cx="5" cy="12" r="1" />
-            </svg>
+            <Icon name=IconName::Ellipsis />
             <span class="sr-only">More pages</span>
         </span>
     }

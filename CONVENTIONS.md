@@ -56,8 +56,13 @@ kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
   **Limitation:** *enter* animations work as-is; *exit* animations
   (`data-[state=closed]:…`) need a presence/delayed-unmount helper because `<Show>`
   unmounts immediately — defer exit animations until that helper exists.
-- **Icons:** inline the needed lucide SVG paths (as `checkbox`/`accordion` do).
-  **No icon dependency.**
+- **Icons:** use the `Icon` primitive (`src/icon.rs`) — `<Icon name=IconName::X
+  class="size-4"/>`. It inlines lucide `<path>` data (**no icon dependency** — no
+  `icondata`/`leptos_icons`), so only the glyphs you name ship. Need a new glyph?
+  Add a variant to `IconName` (copy the shapes from <https://lucide.dev>, keep
+  lucide's kebab-case name) — do **not** re-introduce a one-off inline `<svg>`.
+  Color follows `currentColor`; size/opacity via `class` (replaces the `size-4`
+  default). `Spinner` stays separate (it owns `animate-spin` + `role=status`).
 - **Charts:** **out of scope for `ui`** — charting needs wasm-bindgen/JS interop
   (kesulu uses lightweight-charts via `app`'s `chart_bindings.rs`) and shadcn's own
   Chart is just a Recharts theme wrapper. `ui` may provide a `Card` to frame a
@@ -97,6 +102,7 @@ kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
 | `table` | `Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableRow`, `TableHead` (the `<th>`), `TableCell`, `TableCaption` — shadcn primitives; the legacy `data_display::TableHead` (`<thead>` wrapper) was removed in favor of these |
 | `toggle` | `Toggle`, `ToggleGroup`, `ToggleGroupItem` |
 | `hover_card` | `HoverCard`, `HoverCardTrigger`, `HoverCardContent` |
+| `icon` | `Icon`, `IconName` — inlined lucide glyph set (no icon dependency); add a variant per new glyph |
 | `collapsible` | `Collapsible`, `CollapsibleTrigger`, `CollapsibleContent` |
 | `aspect_ratio` | `AspectRatio` |
 | `spinner` | `Spinner` |

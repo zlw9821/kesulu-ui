@@ -1,6 +1,8 @@
 use leptos::children::ChildrenFn;
 use leptos::prelude::*;
 
+use super::icon::{Icon, IconName};
+
 use super::presence::use_presence;
 
 /// Trigger size — shadcn's `data-[size=…]` heights.
@@ -72,17 +74,7 @@ pub fn SelectTrigger(
             )
         >
             {children()}
-            <svg
-                class="size-4 opacity-50"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            >
-                <polyline points="6 9 12 15 18 9" />
-            </svg>
+            <Icon name=IconName::ChevronDown class="size-4 opacity-50" />
         </button>
     }
 }
@@ -184,17 +176,7 @@ pub fn SelectItem(
         >
             <span class="absolute right-2 flex size-3.5 items-center justify-center">
                 <Show when=move || selected.get()>
-                    <svg
-                        class="size-4"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <polyline points="20 6 9 17 4 12" />
-                    </svg>
+                    <Icon name=IconName::Check />
                 </Show>
             </span>
             {children()}
