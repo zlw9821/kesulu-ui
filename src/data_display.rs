@@ -26,7 +26,7 @@ pub fn Badge(
     };
     view! {
         <span class=format!(
-            "inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-semibold transition-colors {} {}",
+            "inline-flex items-center whitespace-nowrap rounded-md border px-2 py-0.5 text-[10px] font-semibold transition-colors {} {}",
             variant_class,
             class,
         )>{text}</span>

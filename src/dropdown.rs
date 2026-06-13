@@ -2,6 +2,11 @@ use leptos::prelude::*;
 
 use super::presence::use_presence;
 
+/// Shared close handle so a `DropdownMenuItem` dismisses the menu on select
+/// (standard Radix behaviour). Provided by `DropdownMenu`, read by items.
+#[derive(Clone, Copy)]
+struct DropdownClose(WriteSignal<bool>);
+
 #[component]
 pub fn DropdownMenu(
     #[prop(into)] trigger: AnyView,
@@ -9,6 +14,7 @@ pub fn DropdownMenu(
     children: ChildrenFn,
 ) -> impl IntoView {
     let (open, set_open) = signal(false);
+    provide_context(DropdownClose(set_open));
     let p = use_presence(open.into(), 150);
     view! {
         <div class=format!("relative inline-block {}", class)>
@@ -36,6 +42,8 @@ pub fn DropdownMenuItem(
     #[prop(optional, into)] on_click: Option<Callback<()>>,
     children: Children,
 ) -> impl IntoView {
+    // 选中即关（标准 Radix 行为）；脱离 DropdownMenu 单用时 context 缺省，静默跳过。
+    let close = use_context::<DropdownClose>();
     view! {
         <button
             class=format!(
@@ -45,6 +53,9 @@ pub fn DropdownMenuItem(
             on:click=move |_| {
                 if let Some(cb) = &on_click {
                     cb.run(());
+                }
+                if let Some(c) = close {
+                    c.0.set(false);
                 }
             }
         >
