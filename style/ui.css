@@ -32,8 +32,16 @@
   --color-destructive: #EF4444;
   --color-destructive-foreground: #FFFFFF;
   --color-destructive-dim: rgba(239, 68, 68, 0.1);
+  /* Muted/dark solid red — a quiet-but-solid destructive button (escape hatch),
+   * one rung below the loud alert red (`--color-destructive`) used for the actual
+   * submit/confirm. Solid fill so it reads as a button on a near-black surface. */
+  --color-destructive-muted: #991B1B;
   --color-border: rgba(255, 255, 255, 0.08);
   --color-input: rgba(255, 255, 255, 0.08);
+  /* Interactive affordance border — the hairline `--border` (0.08) vanishes on a
+   * button against a near-black surface; outline-style buttons use this stronger
+   * edge so they unmistakably read as buttons. */
+  --color-border-strong: rgba(255, 255, 255, 0.16);
   --color-ring: #10B981;
 
   /* === semantic colors (used by feedback primitives) === */
@@ -56,6 +64,16 @@
   /* === animation === */
   --animate-fade-in: fadeIn 200ms ease-out;
   --animate-slide-up: slideUp 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hold an exit animation's final frame until the node unmounts. tw-animate-css's
+ * own `fill-mode-forwards` utility does not generate in this Tailwind v4 + import
+ * setup, so we define the equivalent directly: it sets the var the `animate-out`
+ * shorthand reads (`--tw-animation-fill-mode`), preventing a presence-animated
+ * overlay from snapping back to opacity 1 between animation-end and unmount —
+ * which is the flash seen when closing a Dialog. */
+.anim-fill-forwards {
+  animation-fill-mode: forwards;
 }
 
 @keyframes fadeIn {

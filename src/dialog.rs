@@ -42,7 +42,7 @@ pub fn Dialog(#[prop(into)] open: RwSignal<bool>, children: ChildrenFn) -> impl 
                 <div
                     class=move || {
                         format!(
-                            "fixed inset-0 bg-black/80 {}",
+                            "fixed inset-0 bg-black/80 duration-200 anim-fill-forwards {}",
                             if p.open.get() {
                                 "animate-in fade-in-0"
                             } else {
@@ -57,7 +57,7 @@ pub fn Dialog(#[prop(into)] open: RwSignal<bool>, children: ChildrenFn) -> impl 
                     <div
                         class=move || {
                             format!(
-                                "relative z-50 w-full max-w-lg rounded-lg border border-border bg-card p-6 shadow-lg duration-200 {}",
+                                "relative z-50 w-full max-w-lg rounded-lg border border-border bg-card p-6 shadow-lg duration-200 anim-fill-forwards {}",
                                 if p.open.get() {
                                     "animate-in fade-in-0 zoom-in-95"
                                 } else {
@@ -135,14 +135,14 @@ pub fn AlertDialog(
             <div class="fixed inset-0 z-50">
                 <div class=move || {
                     format!(
-                        "fixed inset-0 bg-black/80 {}",
+                        "fixed inset-0 bg-black/80 duration-200 anim-fill-forwards {}",
                         if p.open.get() { "animate-in fade-in-0" } else { "animate-out fade-out-0" },
                     )
                 }></div>
                 <div class="fixed inset-0 flex items-center justify-center p-4">
                     <div class=move || {
                         format!(
-                            "relative z-50 w-full max-w-md rounded-lg border border-border bg-card p-6 shadow-lg duration-200 {}",
+                            "relative z-50 w-full max-w-md rounded-lg border border-border bg-card p-6 shadow-lg duration-200 anim-fill-forwards {}",
                             if p.open.get() {
                                 "animate-in fade-in-0 zoom-in-95"
                             } else {

@@ -5,8 +5,9 @@ pub enum ButtonVariant {
     #[default]
     Default,
     Destructive,
-    /// 危险但次要的逃生动作（如紧急平仓）：红描边 + 红字、透明底，不与填充主操作争视觉。
-    DestructiveOutline,
+    /// 危险但次要的逃生动作（如紧急平仓）：实心暗红底 + 白字——明确是个按钮、保留危险语义，
+    /// 又以更暗的红比"主危险"（亮红 `Destructive`，用于真正的提交/确认）低一档，不抢主操作。
+    DestructiveMuted,
     Outline,
     Secondary,
     Ghost,
@@ -39,11 +40,11 @@ pub fn Button(
         ButtonVariant::Destructive => {
             "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm"
         }
-        ButtonVariant::DestructiveOutline => {
-            "border border-destructive/40 bg-transparent text-destructive hover:bg-destructive/10 hover:text-destructive shadow-sm"
+        ButtonVariant::DestructiveMuted => {
+            "bg-destructive-muted text-destructive-foreground hover:bg-destructive shadow-sm"
         }
         ButtonVariant::Outline => {
-            "border border-input bg-background hover:bg-secondary hover:text-foreground shadow-sm"
+            "border border-border-strong bg-transparent text-foreground hover:bg-muted hover:text-foreground shadow-sm"
         }
         ButtonVariant::Secondary => "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ButtonVariant::Ghost => "hover:bg-secondary hover:text-foreground",
