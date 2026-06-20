@@ -1,4 +1,4 @@
-# ui
+# kesulu-ui
 
 A reusable, business-agnostic Leptos UI primitive library — a [shadcn/ui](https://ui.shadcn.com/)
 port to Leptos (button, card, dialog, input, tabs, …). Depends only on `leptos`
@@ -24,7 +24,7 @@ parent/
 
 ```toml
 # your-app/crates/<crate>/Cargo.toml  (adjust the `..` depth to your layout)
-ui = { path = "../../../kesulu-ui" }
+kesulu-ui = { path = "../../../kesulu-ui" }
 ```
 
 Forward the rendering backend your app uses (exactly one is active in the final
@@ -32,12 +32,12 @@ binary):
 
 ```toml
 [features]
-csr = ["ui/csr"]                                 # Tauri / client-side rendering
-hydrate = ["leptos/hydrate", "ui/hydrate"]       # Leptos SSR — wasm side
-ssr = ["leptos/ssr", "ui/ssr"]                   # Leptos SSR — server side
+csr = ["kesulu-ui/csr"]                                 # Tauri / client-side rendering
+hydrate = ["leptos/hydrate", "kesulu-ui/hydrate"]       # Leptos SSR — wasm side
+ssr = ["leptos/ssr", "kesulu-ui/ssr"]                   # Leptos SSR — server side
 ```
 
-> **Leptos version lockstep.** `ui` floats on `leptos = "0.8"`. As a path
+> **Leptos version lockstep.** `kesulu-ui` floats on `leptos = "0.8"`. As a path
 > dependency it compiles in the same build graph as your app, so Cargo unifies
 > leptos to a single version. Keep every consumer on the same `0.8.x` line — two
 > different leptos instances will not type-check.
@@ -74,7 +74,7 @@ pnpm add tw-animate-css
 ## Usage
 
 ```rust
-use ui::*;
+use kesulu_ui::*;
 
 view! { <Button>"Click me"</Button> }
 ```

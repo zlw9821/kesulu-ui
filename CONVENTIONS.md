@@ -1,4 +1,4 @@
-# `ui` crate — conventions & roadmap
+# `kesulu-ui` crate — conventions & roadmap
 
 A reusable, business-agnostic shadcn/ui port for Leptos v0.8. **No kesulu domain
 types, no web-sys, no I/O** — deps are `leptos` + `leptos_router` only. This file
@@ -8,7 +8,7 @@ consistent as it grows.
 ## House rules (derive new components from `button.rs` / `card.rs`)
 
 1. **One file per component family** under `src/`, `pub use`-flattened in `lib.rs`
-   (so consumers write `use ui::Button;`). Module is private; types are `pub`.
+   (so consumers write `use kesulu_ui::Button;`). Module is private; types are `pub`.
 2. **`#[component]` + `leptos::prelude::*`.** Match the shadcn class strings
    faithfully (query the shadcn MCP / `shadcn` skill before authoring).
 3. **`class` passthrough is mandatory** for any component with a styleable root:
@@ -39,7 +39,7 @@ they use (`fadeIn`, `slideUp`). A consumer wires the whole library with:
 
 ```css
 @import "tailwindcss";
-@import ".../crates/ui/style/ui.css";   /* tokens + component source scan */
+@import ".../kesulu-ui/style/ui.css";   /* tokens + component source scan */
 ```
 
 kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
@@ -63,15 +63,15 @@ kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
   lucide's kebab-case name) — do **not** re-introduce a one-off inline `<svg>`.
   Color follows `currentColor`; size/opacity via `class` (replaces the `size-4`
   default). `Spinner` stays separate (it owns `animate-spin` + `role=status`).
-- **Charts:** **out of scope for `ui`** — charting needs wasm-bindgen/JS interop
+- **Charts:** **out of scope for `kesulu-ui`** — charting needs wasm-bindgen/JS interop
   (kesulu uses lightweight-charts via `app`'s `chart_bindings.rs`) and shadcn's own
-  Chart is just a Recharts theme wrapper. `ui` may provide a `Card` to frame a
-  chart, never the chart engine. A separate `ui-charts` crate is a future option,
+  Chart is just a Recharts theme wrapper. `kesulu-ui` may provide a `Card` to frame a
+  chart, never the chart engine. A separate `kesulu-ui-charts` crate is a future option,
   not now.
 - **Tables:** ship the shadcn **presentational primitives** only (`Table`,
   `TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`, `TableCaption`)
   — zero deps. Data-grid behaviour (sort/filter/paginate/virtualize, the TanStack
-  recipe) is **app-level composition**, not a `ui` component.
+  recipe) is **app-level composition**, not a `kesulu-ui` component.
 
 ## Current inventory (read the source for exact props)
 
