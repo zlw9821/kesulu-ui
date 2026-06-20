@@ -42,7 +42,7 @@ pub fn DropdownMenuItem(
     #[prop(optional, into)] on_click: Option<Callback<()>>,
     children: Children,
 ) -> impl IntoView {
-    // 选中即关（标准 Radix 行为）；脱离 DropdownMenu 单用时 context 缺省，静默跳过。
+    // Close on select (standard Radix behaviour); silently skipped when used outside a DropdownMenu context.
     let close = use_context::<DropdownClose>();
     view! {
         <button

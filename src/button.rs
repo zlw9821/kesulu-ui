@@ -5,8 +5,10 @@ pub enum ButtonVariant {
     #[default]
     Default,
     Destructive,
-    /// 危险但次要的逃生动作（如紧急平仓）：实心暗红底 + 白字——明确是个按钮、保留危险语义，
-    /// 又以更暗的红比"主危险"（亮红 `Destructive`，用于真正的提交/确认）低一档，不抢主操作。
+    /// Escape-hatch actions that are destructive but secondary (e.g. emergency flatten):
+    /// solid dark-red fill + white text — clearly a button, preserves the danger semantic,
+    /// but sits one tier below the primary destructive (`Destructive`, bright red, used for
+    /// real submit/confirm actions) so it does not compete for visual dominance.
     DestructiveMuted,
     Outline,
     Secondary,
