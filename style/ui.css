@@ -1,15 +1,19 @@
 /* ui crate — self-contained design tokens (shadcn/ui parity).
  *
- * External consumers: `@import "tailwindcss";` then `@import ".../ui/style/ui.css";`
- * — the `@source` below makes Tailwind scan this crate's components, and the
+ * External consumers — in your Tailwind entry file:
+ *   @import "tailwindcss";
+ *   @import "tw-animate-css";              (see node dependency note below)
+ *   @import ".../kesulu-ui/style/ui.css";
+ * The `@source` below makes Tailwind scan this crate's components, and the
  * `@theme` block supplies every token they reference. Relative paths in
  * `@source` resolve against THIS file, so it stays correct wherever imported.
  *
- * CSS-layer dependency: `tw-animate-css` (provides shadcn's `animate-in` /
- * `fade-in-0` / `zoom-in-95` / `slide-in-from-*` utilities). Consumers must have
- * it installed (`pnpm add tw-animate-css`); resolved from node_modules. */
-
-@import "tw-animate-css";
+ * node dependency — `tw-animate-css` (shadcn's `animate-in` / `fade-in-0` /
+ * `zoom-in-95` / `slide-in-from-*` utilities): the CONSUMER imports it from its
+ * own entry CSS, NOT here. A bare specifier resolves from the importing file's
+ * directory; this file lives outside the consumer's tree (sibling repo), so
+ * importing it here cannot find node_modules. Consumers: `pnpm add tw-animate-css`
+ * and add the `@import` shown above. */
 
 @source "./src/**/*.rs";
 

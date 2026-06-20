@@ -49,8 +49,9 @@ design tokens. In your Tailwind entry file:
 
 ```css
 @import "tailwindcss";
-@import "../../kesulu-ui/style/ui.css";   /* adjust depth to your layout */
-@source "../src/**/*.rs";                  /* scan YOUR app's components */
+@import "tw-animate-css";                   /* node dep — see step 3 */
+@import "../../kesulu-ui/style/ui.css";     /* adjust depth to your layout */
+@source "../src/**/*.rs";                   /* scan YOUR app's components */
 ```
 
 `ui.css` already declares `@source "./src/**/*.rs"` relative to itself, so
@@ -59,9 +60,12 @@ you only point it at your own sources.
 
 ### 3. node dependency
 
-`ui.css` imports [`tw-animate-css`](https://github.com/Wombosvideo/tw-animate-css)
-(provides shadcn's `animate-in` / `fade-in-0` / `zoom-in-95` / `slide-in-from-*`
-utilities), resolved from `node_modules`:
+The components use [`tw-animate-css`](https://github.com/Wombosvideo/tw-animate-css)
+utilities (shadcn's `animate-in` / `fade-in-0` / `zoom-in-95` / `slide-in-from-*`).
+Because `ui.css` lives outside your project tree, it does **not** import the
+package itself — a bare specifier would resolve from `ui.css`'s own directory,
+which has no `node_modules`. Install it and add the `@import` to your own entry
+CSS (shown in step 2):
 
 ```
 pnpm add tw-animate-css
