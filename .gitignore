@@ -1,0 +1,4 @@
+/target
+# Library crate: the consumer's lockfile governs resolution. The standalone
+# lockfile only matters for this repo's own checks, so it stays untracked.
+/Cargo.lock
