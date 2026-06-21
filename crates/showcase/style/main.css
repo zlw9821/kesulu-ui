@@ -1,16 +1,15 @@
 @import "tailwindcss";
-/* Consumer-side import of the animation utilities (resolved from THIS crate's
- * node_modules); ui.css deliberately does not import it. */
+/* tw-animate-css resolves from this crate's own node_modules. */
 @import "tw-animate-css";
-/* The lib's design tokens + its self-referential @source that scans the
- * primitives. Path is relative to this file: crates/showcase/style → crates. */
-@import "../../kesulu-ui/style/ui.css";
-/* Scan the showcase source for wrapper/demo classes, and the lib source for the
- * components own utilities. ui.css carries a self-referential @source, but from
- * this in-repo entry the chained resolution misses the tw-animate-css utilities
- * (animate-in, fade-in-0, ...), so scan the lib src directly here. */
+/* Bare package name — resolved via the `kesulu-ui` node link (package.json
+ * `link:`) + its `exports` map → style/ui.css. Depth-independent: this line is
+ * identical in every consumer and survives the lib reorganising internally. */
+@import "kesulu-ui";
+/* @source does NOT node-resolve and Tailwind ignores node_modules by default, so
+ * scan the linked lib src explicitly. Path is relative to THIS file's package
+ * (style/ → ../node_modules), not to the lib's location, so it is also stable. */
+@source "../node_modules/kesulu-ui/src/**/*.rs";
 @source "../src/**/*.rs";
-@source "../../kesulu-ui/src/**/*.rs";
 
 @layer base {
   body {

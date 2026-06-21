@@ -1,0 +1,11 @@
+{
+  "name": "kesulu-ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Design tokens + component source for the kesulu-ui Leptos library, consumed by a Tailwind pipeline via @import / @source (not a JS package).",
+  "style": "style/ui.css",
+  "exports": {
+    ".": "./style/ui.css",
+    "./style/ui.css": "./style/ui.css"
+  }
+}

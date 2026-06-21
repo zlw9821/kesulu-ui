@@ -33,18 +33,22 @@ consistent as it grows.
 
 ## CSS contract (`style/ui.css`)
 
-Self-contained: `@source "./src/**/*.rs"` (resolves against the file, so it works
-wherever imported) + the `@theme` tokens every component references + the keyframes
-they use (`fadeIn`, `slideUp`). A consumer wires the whole library with:
+Self-contained: the `@theme` tokens every component references + the keyframes
+they use (`fadeIn`, `slideUp`). The recommended consumer wiring uses the node link
+(`kesulu-ui` resolves by name) plus an explicit `@source` into the consumer's own
+`node_modules` to scan the components:
 
 ```css
 @import "tailwindcss";
-@import "tw-animate-css";                              /* consumer-side node dep */
-@import ".../kesulu-ui/crates/kesulu-ui/style/ui.css"; /* tokens + component source scan */
+@import "tw-animate-css";
+@import "kesulu-ui";                              /* tokens, resolved by package name */
+@source "../node_modules/kesulu-ui/src/**/*.rs"; /* scan the components */
+@source "../src/**/*.rs";                         /* the consumer's own source */
 ```
 
-The `showcase` crate and kesulu's `style/main.css` both do exactly this and keep
-only their own app-specific tokens.
+The `showcase` crate does exactly this; the full rationale (and the relative-path
+fallback) is in [`README.md`](README.md). Consumers keep only their own
+app-specific tokens.
 
 ## Scope boundaries & dependencies (decided for the fan-out)
 

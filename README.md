@@ -38,53 +38,56 @@ parent/
 ### 1. Cargo
 
 ```toml
-# your-app/crates/<crate>/Cargo.toml  (adjust the `..` depth to your layout)
-kesulu-ui = { path = "../../../kesulu-ui/crates/kesulu-ui" }
+# your-app's Cargo.toml  (adjust the `..` depth to your layout)
+kesulu-ui = { path = "../../../kesulu-ui/crates/kesulu-ui", features = ["csr"] }
 ```
 
-Forward the rendering backend your app uses (exactly one is active in the final
-binary):
-
-```toml
-[features]
-csr = ["kesulu-ui/csr"]                                 # Tauri / client-side rendering
-hydrate = ["leptos/hydrate", "kesulu-ui/hydrate"]       # Leptos SSR — wasm side
-ssr = ["leptos/ssr", "kesulu-ui/ssr"]                   # Leptos SSR — server side
-```
+Forward exactly one rendering backend: `csr` (Tauri / client-side), or `ssr` +
+`hydrate` for a Leptos SSR app. In a multi-crate consumer, define the dep once in
+the workspace root and use `kesulu-ui.workspace = true` in members so the path
+lives in a single place.
 
 > **Leptos version lockstep.** `kesulu-ui` floats on `leptos = "0.8"`. As a path
 > dependency it compiles in the same build graph as your app, so Cargo unifies
 > leptos to a single version. Keep every consumer on the same `0.8.x` line — two
 > different leptos instances will not type-check.
 
-### 2. Tailwind CSS
+### 2. Node link (so the CSS resolves by name)
 
-The components are styled with Tailwind v4 utilities and `ui.css` carries the
-design tokens. In your Tailwind entry file:
+The library is also a tiny node package, so its CSS can be imported by name
+instead of a brittle relative path. Add it next to the Tailwind toolchain:
+
+```jsonc
+// your-app/package.json
+"dependencies": {
+  "@tailwindcss/cli": "^4.3.0",
+  "tailwindcss": "^4.3.0",
+  "tw-animate-css": "^1.4.0",
+  "kesulu-ui": "link:../../kesulu-ui/crates/kesulu-ui"  // ← the ONLY relative path; adjust depth
+}
+```
+
+`pnpm install` symlinks it into `node_modules`. This one line is the only place
+the sibling path appears.
+
+### 3. Tailwind entry CSS
+
+Then your entry CSS is **identical in every consumer** (copy verbatim):
 
 ```css
 @import "tailwindcss";
-@import "tw-animate-css";                                /* node dep — see step 3 */
-@import "../../kesulu-ui/crates/kesulu-ui/style/ui.css"; /* adjust depth to your layout */
-@source "../src/**/*.rs";                                /* scan YOUR app's components */
+@import "tw-animate-css";
+@import "kesulu-ui";                              /* tokens, resolved by package name */
+@source "../node_modules/kesulu-ui/src/**/*.rs"; /* scan the lib's components */
+@source "../src/**/*.rs";                         /* scan YOUR components */
 ```
 
-`ui.css` already declares `@source "./src/**/*.rs"` relative to itself, so
-Tailwind scans the library's components automatically wherever it is imported —
-you only point it at your own sources.
-
-### 3. node dependency
-
-The components use [`tw-animate-css`](https://github.com/Wombosvideo/tw-animate-css)
-utilities (shadcn's `animate-in` / `fade-in-0` / `zoom-in-95` / `slide-in-from-*`).
-Because `ui.css` lives outside your project tree, it does **not** import the
-package itself — a bare specifier would resolve from `ui.css`'s own directory,
-which has no `node_modules`. Install it and add the `@import` to your own entry
-CSS (shown in step 2):
-
-```
-pnpm add tw-animate-css
-```
+Why this exact shape (two Tailwind v4 facts): `@import` resolves node packages
+(so `kesulu-ui` works by name, via the package's `exports`), but `@source` is a
+filesystem glob that ignores `node_modules` — so the lib's source is scanned via
+an explicit path into *your own* `node_modules` (stable wherever the lib lives).
+Build it with a Trunk `pre_build` hook running
+`tailwindcss -i style/main.css -o style/output.css`.
 
 ## Usage
 
