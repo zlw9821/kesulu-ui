@@ -39,10 +39,12 @@ they use (`fadeIn`, `slideUp`). A consumer wires the whole library with:
 
 ```css
 @import "tailwindcss";
-@import ".../kesulu-ui/style/ui.css";   /* tokens + component source scan */
+@import "tw-animate-css";                              /* consumer-side node dep */
+@import ".../kesulu-ui/crates/kesulu-ui/style/ui.css"; /* tokens + component source scan */
 ```
 
-kesulu's `style/main.css` does exactly this and keeps only app-specific tokens.
+The `showcase` crate and kesulu's `style/main.css` both do exactly this and keep
+only their own app-specific tokens.
 
 ## Scope boundaries & dependencies (decided for the fan-out)
 

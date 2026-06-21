@@ -1,0 +1,26 @@
+[package]
+name = "kesulu-ui"
+version = "0.1.0"
+edition = "2024"
+description = "Reusable, business-agnostic Leptos UI primitive library — a shadcn/ui port to Leptos."
+license = "MIT"
+repository = "https://github.com/zlw9821/kesulu-ui"
+readme = "../../README.md"
+
+[dependencies]
+# Kept at a permissive caret so the version floats with the consuming app within
+# 0.8.x. As a path dependency, `kesulu-ui` is compiled in the same build graph as the
+# consumer, so Cargo unifies leptos to a single version — there must be exactly
+# one leptos instance across the app and this crate, or types won't line up.
+leptos = "0.8"
+leptos_router = "0.8"
+
+[features]
+default = []
+# Exactly one rendering backend is selected by the final binary, not here. A
+# Tauri/CSR app enables `csr`; a Leptos SSR app forwards `ssr` (server) +
+# `hydrate` (wasm). With no feature set the crate stays backend-neutral and still
+# compiles, which is what a CSR consumer relies on.
+csr = ["leptos/csr"]
+hydrate = ["leptos/hydrate"]
+ssr = ["leptos/ssr", "leptos_router/ssr"]

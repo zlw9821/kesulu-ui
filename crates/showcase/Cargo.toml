@@ -1,0 +1,13 @@
+[package]
+name = "showcase"
+version = "0.1.0"
+edition = "2024"
+publish = false
+description = "Living gallery / dev harness for the kesulu-ui primitives (CSR, Trunk)."
+
+[dependencies]
+# CSR demo: the binary selects the `csr` backend; kesulu-ui forwards it. This is
+# also the path that proves the lib's `csr` feature compiles end to end.
+leptos = { version = "0.8", features = ["csr"] }
+kesulu-ui = { path = "../kesulu-ui", features = ["csr"] }
+console_error_panic_hook = "0.1"

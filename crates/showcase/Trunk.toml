@@ -1,0 +1,11 @@
+[build]
+target = "index.html"
+
+# Build the stylesheet before Trunk processes assets. The gallery's utility
+# classes come from kesulu-ui's components (scanned via ui.css's own @source) plus
+# this crate's src, compiled by the SAME Tailwind pipeline kesulu uses
+# (pnpm @tailwindcss/cli) so behaviour matches. Run `pnpm install` once first.
+[[hooks]]
+stage = "pre_build"
+command = "pnpm"
+command_arguments = ["run", "build:css"]
